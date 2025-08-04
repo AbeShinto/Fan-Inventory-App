@@ -1,0 +1,205 @@
+import React, { useState, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './components/ui/card';
+import { Loader2, Fan, Cloud, ArrowLeft } from 'lucide-react';
+
+// Use this to create a simple set of shadcn/ui components without external dependencies.
+// This is a minimal set to be self-contained in a single file.
+const Card = ({ className, ...props }) => (
+  <div className={`rounded-xl border bg-card text-card-foreground shadow ${className}`} {...props} />
+);
+const CardHeader = ({ className, ...props }) => (
+  <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
+);
+const CardTitle = ({ className, ...props }) => (
+  <h3 className={`text-2xl font-semibold leading-none tracking-tight ${className}`} {...props} />
+);
+const CardDescription = ({ className, ...props }) => (
+  <p className={`text-sm text-muted-foreground ${className}`} {...props} />
+);
+const CardContent = ({ className, ...props }) => (
+  <div className={`p-6 pt-0 ${className}`} {...props} />
+);
+
+// This is the core application logic.
+const App = () => {
+  // State to hold the full inventory data, the selected item, and loading status.
+  const [inventory, setInventory] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // This useEffect hook runs once when the component mounts.
+  // It's responsible for fetching the data from the Google Sheet and
+  // parsing the URL for a specific asset ID.
+  useEffect(() => {
+    // Replace this with your actual public Google Sheet CSV URL.
+    // Make sure to publish your sheet to the web as a CSV.
+    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT1E4X5Y-B_S5M4C_p-M_L3B2R7W-M3T3K4C5U6D7/pub?output=csv';
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(googleSheetUrl);
+        if (!response.ok) {
+          throw new Error('Failed to fetch inventory data. Please check the Google Sheet URL.');
+        }
+
+        const text = await response.text();
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        const headers = lines[0].split(',').map(header => header.trim().toLowerCase());
+
+        const parsedData = lines.slice(1).map(line => {
+          const values = line.split(',');
+          let item = {};
+          headers.forEach((header, index) => {
+            item[header] = values[index].trim();
+          });
+          return item;
+        });
+
+        setInventory(parsedData);
+
+        // Check for an 'id' query parameter in the URL.
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        if (id && parsedData) {
+          const foundItem = parsedData.find(item => item.id === id);
+          if (foundItem) {
+            setSelectedItem(foundItem);
+          } else {
+            setError(`Asset with ID "${id}" not found.`);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        setError(e.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once.
+
+  // Conditional rendering for the different views of the app.
+  // The primary view is the single item detail page.
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <Loader2 className="h-10 w-10 animate-spin text-gray-500" />
+          <p className="mt-4 text-lg text-gray-700">Loading inventory data...</p>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
+          <h1 className="text-4xl font-bold text-red-600">Error</h1>
+          <p className="mt-4 text-xl text-red-500">{error}</p>
+          <p className="mt-2 text-md text-gray-600">Please ensure your Google Sheet is published to the web as a CSV.</p>
+        </div>
+      );
+    }
+
+    if (selectedItem) {
+      return (
+        <div className="p-4 md:p-8 lg:p-12">
+          <Card className="max-w-2xl mx-auto border-4 border-gray-100 dark:border-gray-800">
+            <CardHeader className="bg-gray-100 dark:bg-gray-800 rounded-t-xl flex flex-row items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {selectedItem.type && selectedItem.type.toLowerCase() === 'fan' ? (
+                  <Fan className="h-10 w-10 text-blue-500" />
+                ) : (
+                  <Cloud className="h-10 w-10 text-gray-500" />
+                )}
+                <div>
+                  <CardTitle className="text-gray-900 dark:text-gray-100">{selectedItem.name}</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-gray-400 font-medium">Asset ID: {selectedItem.id}</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="mt-6 space-y-4 text-gray-700 dark:text-gray-300">
+              <p>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Type:</span> {selectedItem.type}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Location:</span> {selectedItem.location}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Status:</span> {selectedItem.status}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Last Serviced:</span> {selectedItem.last_serviced}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Notes:</span> {selectedItem.notes}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
+
+    // This is the default view if no ID is provided.
+    return (
+      <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
+        <h1 className="text-4xl font-bold text-gray-800">College Asset Inventory</h1>
+        <p className="mt-4 text-xl text-gray-600 max-w-xl">
+          This app is designed to display details for a specific asset.
+          Please scan an NFC tag or manually add `?id=[asset_id]` to the URL to view an item.
+        </p>
+        <p className="mt-2 text-lg text-gray-500">
+          Example: `your-app-url?id=FAN001`
+        </p>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+      {renderContent()}
+    </div>
+  );
+};
+
+// This is the standard entry point for a React app.
+// It initializes the React DOM and renders the App component.
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// This code is a complete HTML file to make the React app runnable.
+// It includes the necessary scripts for React, React DOM, Tailwind CSS, and Lucide Icons.
+// The app will be rendered into the div with id="root".
+// This section is commented out to prevent it from being rendered directly inside the React code block.
+/*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Inventory App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // The React code from above would go here.
+    </script>
+</body>
+</html>
+*/
