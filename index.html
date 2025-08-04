@@ -86,18 +86,28 @@
               try {
                 const response = await fetch(googleSheetUrl);
                 if (!response.ok) {
-                  throw new Error('Failed to fetch inventory data. Please check the Google Sheet URL and ensure it is published as a CSV.');
+                  throw new Error(`Failed to fetch inventory data. Server responded with status: ${response.status}. Please check your Google Sheet's public URL.`);
                 }
 
                 const text = await response.text();
+                // Check if the response is empty or invalid
+                if (!text || text.trim() === '') {
+                  throw new Error('Received an empty response from the Google Sheet URL. Please ensure it is published correctly.');
+                }
+                
                 const lines = text.split('\n').filter(line => line.trim() !== '');
                 const headers = lines[0].split(',').map(header => header.trim().toLowerCase());
+                
+                if (headers.length < 1 || !headers[0].startsWith('id')) {
+                    throw new Error('The data does not appear to be a valid CSV. Please ensure the first column is "id" and the sheet is published correctly.');
+                }
 
                 const parsedData = lines.slice(1).map(line => {
                   const values = line.split(',');
                   let item = {};
                   headers.forEach((header, index) => {
-                    item[header] = values[index].trim();
+                    // Gracefully handle missing data to prevent errors
+                    item[header] = values[index] ? values[index].trim() : '';
                   });
                   return item;
                 });
