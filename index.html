@@ -80,22 +80,35 @@
             // !!! IMPORTANT !!!
             // REPLACE THIS URL WITH THE ONE FROM YOUR PUBLISHED GOOGLE SHEET
             // Go to "File > Share > Publish to web" and choose "CSV" format.
-            const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTKobFwtYisWy2rthSlulMKz58izHff6DV_G2v6YeNHAVur-wugvpZXOWy-BTSgZ1r8DbY7tDNFOYk-/pub?output=csv';
+            const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTKobFwtYisWy2rthSlulMKz58izHff6DV_G2v6YeNHAVur-wugvpZXOWy-BTSgZ1r8DbY7tDNFOYk-/pub?gid=0&single=true&output=csv';
 
             const fetchData = async () => {
               try {
                 const response = await fetch(googleSheetUrl);
                 if (!response.ok) {
-                  throw new Error(`Failed to fetch inventory data. Server responded with status: ${response.status}. Please check your Google Sheet's public URL.`);
+                  throw new Error(`Failed to fetch inventory data. Server responded with status: ${response.status}. This can happen if the Google Sheet URL is incorrect or not properly published to the web as a CSV.`);
                 }
 
                 const text = await response.text();
+
+                // Log the raw text to the console for debugging
+                console.log('--- Raw data from Google Sheet ---');
+                console.log(text);
+                console.log('--- End of raw data ---');
+
                 // Check if the response is empty or invalid
                 if (!text || text.trim() === '') {
-                  throw new Error('Received an empty response from the Google Sheet URL. Please ensure it is published correctly.');
+                  throw new Error('Received an empty response from the Google Sheet URL. Please ensure it is published correctly and contains data.');
                 }
                 
+                // Split the text into lines and filter out any completely empty ones.
                 const lines = text.split('\n').filter(line => line.trim() !== '');
+
+                // Log the lines array to the console for debugging
+                console.log('--- Parsed lines ---');
+                console.log(lines);
+                console.log('--- End of parsed lines ---');
+
                 const headers = lines[0].split(',').map(header => header.trim().toLowerCase());
                 
                 if (headers.length < 1 || !headers[0].startsWith('id')) {
@@ -154,7 +167,6 @@
                 <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
                   <h1 className="text-4xl font-bold text-red-600">Error</h1>
                   <p className="mt-4 text-xl text-red-500">{error}</p>
-                  <p className="mt-2 text-md text-gray-600">Please ensure your Google Sheet is published to the web as a CSV.</p>
                 </div>
               );
             }
