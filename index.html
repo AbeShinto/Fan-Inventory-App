@@ -9,23 +9,15 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        /* NEW CODE: Updated font imports for Raleway and Merriweather */
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Merriweather:wght@400;700&display=swap');
-        /* END NEW CODE */
-
-        /* NEW CODE: Applied Merriweather to body, Raleway to header */
         body { font-family: 'Merriweather', serif; }
         .header-font { font-family: 'Raleway', sans-serif; }
-        /* END NEW CODE */
     </style>
 </head>
 <body>
     <div id="root"></div>
     <!-- The script below contains the React application code. -->
     <script type="text/babel">
-        // The imports have been removed to allow the code to run directly in the browser
-        // using the global variables provided by the script tags.
-
         const { useState, useEffect } = React;
 
         // Custom, self-contained SVG icon components
@@ -83,9 +75,6 @@
           // It's responsible for fetching the data from the Google Sheet and
           // parsing the URL for a specific asset ID.
           useEffect(() => {
-            // !!! IMPORTANT !!!
-            // REPLACE THIS URL WITH THE ONE FROM YOUR PUBLISHED GOOGLE SHEET
-            // Go to "File > Share > Publish to web" and choose "CSV" format.
             const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTKobFwtYisWy2rthSlulMKz58izHff6DV_G2v6YeNHAVur-wugvpZXOWy-BTSgZ1r8DbY7tDNFOYk-/pub?gid=0&single=true&output=csv';
 
             const fetchData = async () => {
@@ -220,7 +209,6 @@
             // This is the default view if no ID is provided.
             return (
               <div className="flex flex-col items-center justify-center p-4 text-center">
-                {/* NEW CODE: Removed redundant header from here as it's now global */}
                 <p className="mt-4 text-xl text-white max-w-xl">
                   This app is designed to display details for a specific asset.
                   Please scan an NFC tag or manually add `?id=[asset_id]` to the URL to view an item.
@@ -228,30 +216,40 @@
                 <p className="mt-2 text-lg text-white">
                   Example: `your-app-url?id=FAN001`
                 </p>
-                {/* END NEW CODE */}
               </div>
             );
           };
 
           return (
-            {/* NEW CODE: Updated full page background color and header background color, and header width */}
             <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center" style={{ backgroundColor: '#4094b0' }}>
                 <h1 className="text-5xl font-extrabold text-white mt-8 mb-8 header-font p-4 w-full text-center" style={{ backgroundColor: '#005776' }}>CCA Facilities Inventory</h1> {/* Global Header */}
                 {renderContent()}
             </div>
-            {/* END NEW CODE */}
           );
         };
 
         // This is the standard entry point for a React app.
         // It initializes the React DOM and renders the App component.
-        const container = document.getElementById('root');
-        const root = ReactDOM.createRoot(container);
-        root.render(
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        );
+        // NEW CODE: Ensure the DOM is fully loaded before rendering React
+        window.onload = function() {
+            try {
+                const container = document.getElementById('root');
+                if (container) {
+                    const root = ReactDOM.createRoot(container);
+                    root.render(
+                        <React.StrictMode>
+                            <App />
+                        </React.StrictMode>
+                    );
+                } else {
+                    console.error('Root element not found. React app cannot mount.');
+                }
+            } catch (e) {
+                console.error('Error rendering React app:', e);
+                // You could display a user-friendly error message here if needed
+            }
+        };
+        // END NEW CODE
     </script>
 </body>
 </html>
