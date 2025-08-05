@@ -219,15 +219,16 @@
 
             // This is the default view if no ID is provided.
             return (
-              <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
-                <h1 className="text-4xl font-bold text-gray-800">College Asset Inventory</h1>
-                <p className="mt-4 text-xl text-gray-600 max-w-xl">
+              <div className="flex flex-col items-center justify-center p-4 text-center">
+                {/* NEW CODE: Removed redundant header from here as it's now global */}
+                <p className="mt-4 text-xl text-white max-w-xl">
                   This app is designed to display details for a specific asset.
                   Please scan an NFC tag or manually add `?id=[asset_id]` to the URL to view an item.
                 </p>
-                <p className="mt-2 text-lg text-gray-500">
+                <p className="mt-2 text-lg text-white">
                   Example: `your-app-url?id=FAN001`
                 </p>
+                {/* END NEW CODE */}
               </div>
             );
           };
@@ -235,7 +236,7 @@
           return (
             {/* NEW CODE: Updated full page background color and header background color, and header width */}
             <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center" style={{ backgroundColor: '#4094b0' }}>
-                <h1 className="text-5xl font-extrabold text-white mb-8 header-font p-4 w-full text-center" style={{ backgroundColor: '#005776' }}>CCA Facilities Inventory</h1> {/* Global Header */}
+                <h1 className="text-5xl font-extrabold text-white mt-8 mb-8 header-font p-4 w-full text-center" style={{ backgroundColor: '#005776' }}>CCA Facilities Inventory</h1> {/* Global Header */}
                 {renderContent()}
             </div>
             {/* END NEW CODE */}
