@@ -9,8 +9,14 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        /* NEW CODE: Updated font imports for Raleway and Merriweather */
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Merriweather:wght@400;700&display=swap');
+        /* END NEW CODE */
+
+        /* NEW CODE: Applied Merriweather to body, Raleway to header */
+        body { font-family: 'Merriweather', serif; }
+        .header-font { font-family: 'Raleway', sans-serif; }
+        /* END NEW CODE */
     </style>
 </head>
 <body>
@@ -50,9 +56,7 @@
 
         // This is a minimal set of components to be self-contained in a single file.
         const Card = ({ className, ...props }) => (
-          // NEW CODE: Changed card background to white for legibility
           <div className={`rounded-xl border bg-white text-card-foreground shadow ${className}`} {...props} />
-          // END NEW CODE
         );
         const CardHeader = ({ className, ...props }) => (
           <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
@@ -228,9 +232,9 @@
           };
 
           return (
-            // NEW CODE: Changed background color to #408198 and added global header
-            <div className="min-h-screen text-gray-900 dark:text-gray-100 font-sans flex flex-col items-center pt-8" style={{ backgroundColor: '#408198' }}>
-                <h1 className="text-5xl font-extrabold text-white mb-8">CCA Facilities Inventory</h1> {/* Global Header */}
+            // NEW CODE: Updated full page background color and header background color
+            <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center pt-8" style={{ backgroundColor: '#80b7cb' }}>
+                <h1 className="text-5xl font-extrabold text-white mb-8 header-font p-4 rounded-lg" style={{ backgroundColor: '#4094b0' }}>CCA Facilities Inventory</h1> {/* Global Header */}
                 {renderContent()}
             </div>
             // END NEW CODE
