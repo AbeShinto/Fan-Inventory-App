@@ -50,7 +50,9 @@
 
         // This is a minimal set of components to be self-contained in a single file.
         const Card = ({ className, ...props }) => (
-          <div className={`rounded-xl border bg-card text-card-foreground shadow ${className}`} {...props} />
+          // NEW CODE: Changed card background to white for legibility
+          <div className={`rounded-xl border bg-white text-card-foreground shadow ${className}`} {...props} />
+          // END NEW CODE
         );
         const CardHeader = ({ className, ...props }) => (
           <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
@@ -213,9 +215,6 @@
             // This is the default view if no ID is provided.
             return (
               <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
-                {/* NEW CODE: Added main header for the default page */}
-                <h1 className="text-5xl font-extrabold text-white mb-6">CCA Facilities Inventory</h1>
-                {/* END NEW CODE */}
                 <h1 className="text-4xl font-bold text-gray-800">College Asset Inventory</h1>
                 <p className="mt-4 text-xl text-gray-600 max-w-xl">
                   This app is designed to display details for a specific asset.
@@ -229,11 +228,12 @@
           };
 
           return (
-            // NEW CODE: Changed background color to #408198
-            <div className="min-h-screen text-gray-900 dark:text-gray-100 font-sans" style={{ backgroundColor: '#408198' }}>
-            {/* END NEW CODE */}
-              {renderContent()}
+            // NEW CODE: Changed background color to #408198 and added global header
+            <div className="min-h-screen text-gray-900 dark:text-gray-100 font-sans flex flex-col items-center pt-8" style={{ backgroundColor: '#408198' }}>
+                <h1 className="text-5xl font-extrabold text-white mb-8">CCA Facilities Inventory</h1> {/* Global Header */}
+                {renderContent()}
             </div>
+            // END NEW CODE
           );
         };
 
