@@ -80,7 +80,7 @@
             // !!! IMPORTANT !!!
             // REPLACE THIS URL WITH THE ONE FROM YOUR PUBLISHED GOOGLE SHEET
             // Go to "File > Share > Publish to web" and choose "CSV" format.
-            const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTKobFwtYisWy2rthSlulMKz58izHff6DV_G2v6YeNHAVur-wugvpZXOWy-BTSgZ1r8DbY7tDNFOYk-/pub?gid=0&single=true&output=csv';
+            const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT1E4X5Y-B_S5M4C_p-M_L3B2R7W-M3T3K4C5U6D7/pub?output=csv';
 
             const fetchData = async () => {
               try {
@@ -213,6 +213,9 @@
             // This is the default view if no ID is provided.
             return (
               <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
+                {/* NEW CODE: Added main header for the default page */}
+                <h1 className="text-5xl font-extrabold text-white mb-6">CCA Facilities Inventory</h1>
+                {/* END NEW CODE */}
                 <h1 className="text-4xl font-bold text-gray-800">College Asset Inventory</h1>
                 <p className="mt-4 text-xl text-gray-600 max-w-xl">
                   This app is designed to display details for a specific asset.
@@ -226,7 +229,9 @@
           };
 
           return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+            // NEW CODE: Changed background color to #408198
+            <div className="min-h-screen text-gray-900 dark:text-gray-100 font-sans" style={{ backgroundColor: '#408198' }}>
+            {/* END NEW CODE */}
               {renderContent()}
             </div>
           );
