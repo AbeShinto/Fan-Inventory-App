@@ -180,6 +180,7 @@
             if (selectedItem) {
               return (
                 <div className="p-4 md:p-8 lg:p-12">
+                  {/* The card content container retains its original size (max-w-2xl mx-auto) */}
                   <Card className="max-w-2xl mx-auto border-4 border-gray-100 dark:border-gray-800">
                     <CardHeader className="bg-gray-100 dark:bg-gray-800 rounded-t-xl flex flex-row items-center justify-between">
                       <div className="flex items-center space-x-4">
@@ -232,12 +233,12 @@
           };
 
           return (
-            // NEW CODE: Updated full page background color and header background color
-            <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center pt-8" style={{ backgroundColor: '#80b7cb' }}>
-                <h1 className="text-5xl font-extrabold text-white mb-8 header-font p-4 rounded-lg" style={{ backgroundColor: '#4094b0' }}>CCA Facilities Inventory</h1> {/* Global Header */}
+            {/* NEW CODE: Updated full page background color and header background color, and header width */}
+            <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center" style={{ backgroundColor: '#4094b0' }}>
+                <h1 className="text-5xl font-extrabold text-white mb-8 header-font p-4 w-full text-center" style={{ backgroundColor: '#005776' }}>CCA Facilities Inventory</h1> {/* Global Header */}
                 {renderContent()}
             </div>
-            // END NEW CODE
+            {/* END NEW CODE */}
           );
         };
 
