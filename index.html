@@ -171,9 +171,7 @@
             if (selectedItem) {
               return (
                 <div className="p-4 md:p-8 lg:p-12">
-                  {/* The card content container retains its original size (max-w-2xl mx-auto) */}
                   <Card className="max-w-2xl mx-auto border-4 border-gray-100 dark:border-gray-800">
-                    {/* START UPDATED HEADER SECTION */}
                     <CardHeader className="bg-gray-100 dark:bg-gray-800 rounded-t-xl flex flex-row items-center justify-between">
                       <div className="flex items-center space-x-4">
                         {selectedItem.type && selectedItem.type.toLowerCase() === 'fan' ? (
@@ -182,15 +180,11 @@
                           <Cloud className="h-10 w-10 text-gray-500" />
                         )}
                         <div>
-                          {/* Asset ID is now the main title and takes the place of name */}
                           <CardTitle className="text-gray-900 dark:text-gray-100">Asset ID: {selectedItem.id}</CardTitle>
                         </div>
                       </div>
                     </CardHeader>
-                    {/* END UPDATED HEADER SECTION */}
-                    {/* START UPDATED CONTENT SECTION */}
                     <CardContent className="mt-6 space-y-4 text-gray-700 dark:text-gray-300">
-                      {/* New fields are now displayed based on the updated spreadsheet columns */}
                       <p>
                         <span className="font-semibold text-gray-900 dark:text-gray-100">Type:</span> {selectedItem.type}
                       </p>
@@ -204,7 +198,6 @@
                         <span className="font-semibold text-gray-900 dark:text-gray-100">State:</span> {selectedItem.state}
                       </p>
                     </CardContent>
-                    {/* END UPDATED CONTENT SECTION */}
                   </Card>
                 </div>
               );
