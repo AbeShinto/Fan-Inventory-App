@@ -225,17 +225,14 @@
           };
 
           return (
-            {/* UPDATED: Now uses className for background colors */}
             <div className="min-h-screen text-gray-900 dark:text-gray-100 flex flex-col items-center app-bg">
                 <h1 className="text-5xl font-extrabold text-white mt-8 mb-8 header-font p-4 w-full text-center header-bg">CCA Facilities Inventory</h1>
                 <div className="flex-grow flex flex-col items-center justify-center w-full">
                     {renderContent()}
                 </div>
-                {/* START FOOTER SECTION */}
                 <div className="text-lg text-gray-800 header-font p-4 w-full text-center mt-auto footer-bg">
                     Link or Item number not working? email us at <span className="font-bold">OUR EMAIL</span>
                 </div>
-                {/* END FOOTER SECTION */}
             </div>
           );
         };
