@@ -25,3 +25,9 @@
 .footer-bg {
     background-color: #f7c49a;
 }
+.limble-link{
+    text-decoration: underline;
+}
+.limble-link:hover{
+    color: #fc0303;
+}
