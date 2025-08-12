@@ -178,6 +178,10 @@
                           src="https://raw.githubusercontent.com/AbeShinto/Fan-Inventory-App/refs/heads/logo-test/CCA_brand-logo-college_seal-classic-black.svg"
                           alt="College Logo"
                           className="h-10 w-10 object-contain"
+                          onError={(e) => {
+                            e.target.onerror = null; // prevents infinite loop
+                            e.target.src = 'https://placehold.co/40x40/cccccc/333333?text=Logo';
+                          }}
                         />
                         <div>
                           <CardTitle className="text-gray-900 dark:text-gray-100">Asset ID: {selectedItem.id}</CardTitle>
@@ -224,7 +228,7 @@
                     {renderContent()}
                 </div>
                 <div className="text-lg text-gray-800 header-font p-4 w-full text-center mt-auto footer-bg">
-                    Link or Item number not working? email us at <span className="font-bold">OUR EMAIL</span>
+                    Link or Item number not working? email us at <a href="https://tickets.cca.edu" className="font-bold text-white hover:underline">Support Ticket Site</a>
                 </div>
             </div>
           );
