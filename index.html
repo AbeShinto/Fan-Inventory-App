@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Inventory App</title>
-    <!-- Linking the external CSS file -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Linking the external CSS file with a version number to bust the cache -->
+    <link rel="stylesheet" href="style.css?v=1.1">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js?v=1.1"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Merriweather:wght@400;700&display=swap');
         body { font-family: 'Merriweather', serif; }
@@ -174,11 +174,15 @@
                   <Card className="max-w-2xl mx-auto border-4 border-gray-100 dark:border-gray-800">
                     <CardHeader className="bg-gray-100 dark:bg-gray-800 rounded-t-xl flex flex-row items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        {selectedItem.type && selectedItem.type.toLowerCase() === 'fan' ? (
-                          <Fan className="h-10 w-10 text-blue-500" />
-                        ) : (
-                          <Cloud className="h-10 w-10 text-gray-500" />
-                        )}
+                        <img
+                          src="https://raw.githubusercontent.com/AbeShinto/Fan-Inventory-App/refs/heads/main/CCA_brand-logo-college_seal-classic-black.svg"
+                          alt="College Logo"
+                          className="h-10 w-10 object-contain"
+                          onError={(e) => {
+                            e.target.onerror = null; // prevents infinite loop
+                            e.target.src = 'https://placehold.co/40x40/cccccc/333333?text=Logo';
+                          }}
+                        />
                         <div>
                           <CardTitle className="text-gray-900 dark:text-gray-100">Asset ID: {selectedItem.id}</CardTitle>
                         </div>
@@ -223,12 +227,13 @@
                 <div className="flex-grow flex flex-col items-center justify-center w-full">
                     {renderContent()}
                 </div>
-                <div className="text-lg text-gray-800 header-font p-4 w-full text-center mt-auto footer-bg">
-                    Link or fan not working? Click <a className="limble-link" href="https://app.limblecmms.com/loc-problem/utqvgs10477/41026">here</a> to submit ticket
+                <div className="text-lg text-gray-800 header-font p-4 w-full text-center mt-auto footer-bg-updated">
+                    Link or Item number not working? email us at <a href="https://tickets.cca.edu" className="font-bold text-white hover:underline">Support Ticket Site</a>
                 </div>
             </div>
           );
         };
+
 
         // This is the standard entry point for a React app.
         // It initializes the React DOM and renders the App component.
